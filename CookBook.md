@@ -16,7 +16,9 @@ Each measurement variable name builds by the following growing hierarcy:
      InterquartileRange or Autorregresion or
      Correlation or MaxIndex or Skewness or
      Kurtosis or EnergyBands or Angle
-  7. X-axis or Y-axis or Z axis
+  7.()
+  8. -
+  9. X-axis or Y-axis or Z axis
   
   
   The above descripte the default code book more in details to make the titles self explanatory and simply adding feature 
