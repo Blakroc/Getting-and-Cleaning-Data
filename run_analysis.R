@@ -1,5 +1,3 @@
-#setwd()
-
 
 ##########################
 runtheProject <- function(){
@@ -26,14 +24,17 @@ runtheProject <- function(){
       # However, we can replacement fairly quickly with the'features'
       updatedData <- setDescriptiveMeasurementName(mergedData)
       # Proect Step5: Creates a second, independent tidy data set with 
-      # the average of each variable for each activity and each subject. 
-      write.csv(updatedData, "./Activity_Phone_Measurements.csv")
+      # the average of each variable for each activity and each subject.
+      Result <- getAverages(mergedData)
+      
+      # Write result to current file
+      write.csv(Result, "./Activity_Phone_Measurements.csv")
 }
 
 ##########################
 # Zip data is downloaded and unzipped in the current folder
 getInputData <- function(){
-      url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+      url <- "./getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
       name <- "data.zip"
       download.file(url, dest = name)
       unzip(name)    
@@ -68,11 +69,37 @@ getMeanNStdMeasurements <- function(dataSet){
 }
 
 # Modelling a data frame that contains 'avergage' for each  activity and each subject
-getAverage <- function(dataSet){
+# As each instance is by subject and activity... the average for each varaible are by subject and activity
+getAverages <- function(dataSet){
       # Check for 'mean' measurements
       mean_fields <- grepl('mean',names(dataSet))
-      mean_data <- dataSet[which(mean_fields)]      
+      mean_data <- dataSet[which(mean_fields)]
+      data <- dataSet[c("subject", "activity")]
+      requiredData <- cbind(data,mean_data)
       
+      subjectSplits <- split(requiredData, requiredData$subject)
+      
+      subjectActivitySplits <- c()
+      for( i  in  1:length(subjectSplits)){
+            
+            split <- split(subjectSplits[[i]], subjectSplits[[i]]["activity"])
+            subjectActivitySplits <- c( subjectActivitySplits, split)
+            
+      }
+      
+      result <- c()
+      
+      for( j in 1:length(subjectActivitySplits)){
+            
+            list <- subjectActivitySplits[j1]]
+            subject <- list[j,"subject"]
+            activity <- list[j,"activity"]
+            avg <- c( subject, activity, colMeans(list(!c("activity", "subject")) ))
+            result <- rbind(result,avg)
+      }
+      
+      colnames(result) <-names(subjectActivitySplits[[1]])
+
       result # containing only mean and standard deviation fields
       
 }
